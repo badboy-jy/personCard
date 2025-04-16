@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>动态个人信息表</title>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: "Courier New", Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 95%;
+      border-left: 6px solid #4CAF50;
+    }
+
+    .card h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      border-bottom: 2px dashed #ccc;
+      padding-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      width: 30%;
+      color: #4CAF50;
+    }
+
+    a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      th {
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      td {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>个人信息</h1>
+    <table>
+      <tr><th>姓名</th><td id="name">--</td></tr>
+      <tr><th>邮箱</th><td id="email">--</td></tr>
+      <tr><th>电话</th><td id="phone">--</td></tr>
+      <tr><th>微信</th><td id="wechat">--</td></tr>
+      <tr><th>GitHub</th><td id="github">--</td></tr>
+      <tr><th>技术栈</th><td id="stack">--</td></tr>
+    </table>
+  </div>
+
+  <script>
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        name: params.get("name") || "--",
+        email: params.get("email") || "--",
+        phone: params.get("phone") || "--",
+        wechat: params.get("wechat") || "--",
+        github: params.get("github") || "--",
+        stack: params.get("stack") || "--"
+      };
+    }
+
+    function fillInfo() {
+      const info = getQueryParams();
+      document.getElementById("name").innerText = info.name;
+      document.getElementById("email").innerText = info.email;
+      document.getElementById("phone").innerText = info.phone;
+      document.getElementById("wechat").innerText = info.wechat;
+      document.getElementById("github").innerHTML = info.github.startsWith('http')
+        ? `<a href="${info.github}" target="_blank">${info.github}</a>`
+        : info.github;
+      document.getElementById("stack").innerText = info.stack;
+    }
+
+    fillInfo();
+  </script>
+</body>
+</html>
