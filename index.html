@@ -1,210 +1,449 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>个人信息卡片</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-  <style>
-    body {
-      background-color: #f5f5f5;
-      font-family: "Courier New", Courier, monospace;
-      margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>全国特种设备公示信息查询平台</title>
+	<script src="./qrcode.min.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<style>
+		:root {
+			--primary-color: #000000;
+			--secondary-color: #f8f9fa;
+			--border-color: #F7F7F7;
+			--text-color: #333;
+			--text-secondary: #666;
+			--header-bg: #EDEDED;
+			--header1-bg: #F7F7F7;
+		}
 
-    .card, .generator {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      max-width: 520px;
-      width: 100%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			-webkit-tap-highlight-color: transparent;
+		}
 
-    .card {
-      border-left: 6px solid #4CAF50;
-    }
+		body {
+			background-color: #f5f7fa;
+			font-family: "PingFang SC", "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+			color: var(--text-color);
+			line-height: 1.6;
+			padding: 16px;
+			min-height: 100vh;
+		}
 
-    h2, h1 {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+		}
 
-    .form-group {
-      margin: 12px 0;
-    }
+		.cardTable {
+			background: white;
+			overflow: hidden;
+			/* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); */
+			margin-bottom: 20px;
+		}
 
-    input {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
+		.header {
+			background-color: var(--header-bg);
+			padding: 16px;
+			text-align: center;
+			font-size: 18px;
+			font-weight: 500;
+			color: var(--primary-color);
+			border-bottom: 1px solid var(--border-color);
+		}
 
-    button {
-      width: 100%;
-      margin-top: 16px;
-      padding: 12px;
-      font-size: 16px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+		.header2 {
+			background-color: var(--header1-bg);
+			padding: 5px;
+			text-align: center;
+			font-size: 17px;
+			font-weight: bold;
+			color: var(--primary-color);
+			border-bottom: 1px solid var(--border-color);
+			display: flex
+		}
 
-    #qrcode {
-      margin-top: 24px;
-      display: flex;
-      justify-content: center;
-    }
+		.header:last-of-type {
+			border-bottom: none;
+		}
 
-    #download-link {
-      display: none;
-      margin-top: 12px;
-      text-align: center;
-      font-size: 14px;
-      color: #007acc;
-      text-decoration: underline;
-      cursor: pointer;
-    }
+		.card {
+			background-color: #fff;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+			width: 100%;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 1px solid #e0e0e0;
+		}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 16px;
-    }
+		.info-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 14px;
+		}
 
-    th, td {
-      text-align: left;
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
+		.info-table th,
+		.info-table td {
+			border: 1px solid #e0e0e0;
+			padding: 12px 15px;
+			text-align: left;
+			vertical-align: top;
+		}
 
-    th {
-      width: 30%;
-      color: #4CAF50;
-    }
+		.info-table th {
+			background-color: #f8f8f8;
+			width: 140px;
+			font-weight: normal;
+		}
 
-    a {
-      color: #0077cc;
-      text-decoration: none;
-    }
+		.info-table td {
+			word-break: break-all;
+			background-color: #fff;
+		}
 
-    a:hover {
-      text-decoration: underline;
-    }
+		@media (max-width: 600px) {
+			body {
+				padding: 15px;
+			}
 
-    @media (max-width: 500px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-        width: 100%;
-      }
-      th {
-        font-weight: bold;
-        margin-top: 10px;
-      }
-      td {
-        margin-bottom: 10px;
-      }
-    }
-  </style>
+			.platform-title {
+				font-size: 18px;
+			}
+
+			.card {
+				padding: 15px;
+			}
+
+			.info-table th,
+			.info-table td {
+				padding: 10px 12px;
+				font-size: 13px;
+			}
+
+			.info-table th {
+				width: 120px;
+			}
+		}
+
+		.generator {
+			background: white;
+			padding: 24px;
+			border-radius: 12px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+			margin-bottom: 20px;
+		}
+
+		.generator h2 {
+			color: var(--primary-color);
+			margin-bottom: 20px;
+			text-align: center;
+			font-size: 18px;
+		}
+
+		.form-group {
+			margin-bottom: 16px;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 6px;
+			font-size: 14px;
+			color: var(--text-secondary);
+		}
+
+		input {
+			width: 100%;
+			padding: 12px 16px;
+			font-size: 15px;
+			border: 1px solid var(--border-color);
+			border-radius: 8px;
+			background-color: var(--secondary-color);
+			transition: border-color 0.2s;
+		}
+
+		input:focus {
+			outline: none;
+			border-color: var(--primary-color);
+		}
+
+		button {
+			width: 100%;
+			padding: 14px;
+			font-size: 16px;
+			background-color: var(--primary-color);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 500;
+			transition: background-color 0.2s;
+		}
+
+		button:hover {
+			background-color: #000000;
+		}
+
+		#qrcode {
+			margin: 24px auto;
+			display: flex;
+			justify-content: center;
+			padding: 12px;
+			background: white;
+			border-radius: 8px;
+			max-width: 220px;
+		}
+
+		.download-btn {
+			display: block;
+			text-align: center;
+			margin-top: 16px;
+			padding: 12px;
+			font-size: 15px;
+			color: var(--primary-color);
+			text-decoration: none;
+			border: 1px solid var(--primary-color);
+			border-radius: 8px;
+			transition: all 0.2s;
+		}
+
+		.download-btn:hover {
+			background-color: var(--header-bg);
+		}
+
+		@media (max-width: 480px) {
+			body {
+				padding: 12px;
+			}
+
+			.header，.header2 {
+				font-size: 16px;
+				padding: 14px;
+			}
+
+			.info-table th,
+			.info-table td {
+				padding: 12px;
+				font-size: 14px;
+			}
+
+			.info-table th {
+				width: 100px;
+			}
+
+			.generator {
+				padding: 20px;
+			}
+		}
+
+		@media (max-width: 375px) {
+
+			.info-table th,
+			.info-table td {
+				display: block;
+				width: 100%;
+				padding: 10px 12px;
+			}
+
+			.info-table th {
+				padding-bottom: 4px;
+				color: var(--text-color);
+				font-weight: 500;
+			}
+
+			.info-table td {
+				padding-top: 4px;
+				padding-bottom: 12px;
+			}
+		}
+	</style>
 </head>
+
 <body>
+	<div class="container">
+		<!-- 二维码生成页 -->
+		<div id="generator" class="generator" style="display: none;">
+			<h2>特种设备作业人员信息录入</h2>
+			<div class="form-group">
+				<label for="name">姓名</label>
+				<input type="text" id="name" placeholder="请输入姓名">
+			</div>
+			<div class="form-group">
+				<label for="idNumber">身份证号</label>
+				<input type="text" id="idNumber" placeholder="请输入身份证号码">
+			</div>
+			<div class="form-group">
+				<label for="khDate">考核日期</label>
+				<input type="text" id="khDate" placeholder="请输入考核日期">
+			</div>
+			<button onclick="generateQRCode()">生成信息二维码</button>
+			<div id="qrcode"></div>
+			<a id="download-link" class="download-btn" download="特种设备作业人员信息.png" style="display: none;">
+				↓ 下载二维码图片
+			</a>
+		</div>
 
-  <!-- 二维码生成页 -->
-  <div id="generator" class="generator" style="display: none;">
-    <h2>生成二维码名片</h2>
-    <div class="form-group"><input type="text" id="name" placeholder="姓名"></div>
-    <div class="form-group"><input type="text" id="email" placeholder="邮箱"></div>
-    <div class="form-group"><input type="text" id="phone" placeholder="电话"></div>
-    <button onclick="generateQRCode()">生成二维码</button>
-    <div id="qrcode"></div>
-    <a id="download-link" download="qrcode.png">📥 下载二维码</a>
-  </div>
+		<!-- 信息展示卡片页     -->
+		<div id="cardTable" class="cardTable" style="display: none;">
+			<div class="header">全国特种设备公示信息查询平台</div>
+			<div class="header-container">
 
-  <!-- 信息展示卡片页 -->
-  <div id="card" class="card" style="display: none;">
-    <h1>个人信息</h1>
-    <table>
-      <tr><th>姓名</th><td id="v_name">--</td></tr>
-      <tr><th>邮箱</th><td id="v_email">--</td></tr>
-      <tr><th>电话</th><td id="v_phone">--</td></tr>
-      <tr><th>微信</th><td id="v_wechat">--</td></tr>
-      <tr><th>GitHub</th><td id="v_github">--</td></tr>
-      <tr><th>技术栈</th><td id="v_stack">--</td></tr>
-    </table>
-  </div>
+				<div class="header2">
+					<div class="back-icon" onclick="history.back()">
+						<i class="el-icon-arrow-left"></i>
+					</div>
+					<div style="margin: auto;">
+						全国特种设备公示信息查询平台
+					</div>
+				</div>
+			</div>
 
-  <script>
-    const BASE_URL = "https://qr.zqtime.fun/"; // 修改为你的域名地址
+			<div class="card">
+				<table class="info-table">
+					<tr>
+						<th>身份证号</th>
+						<td id="v_idNumber">--</td>
+					</tr>
+					<tr>
+						<th>姓名</th>
+						<td id="v_name">--</td>
+					</tr>
+					<tr>
+						<th>性别</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>证书类别</th>
+						<td>特种设备作业人员</td>
+					</tr>
+					<tr>
+						<th>证书编号</th>
+						<td>140321197201082710</td>
+					</tr>
+					<tr>
+						<th>发证机关</th>
+						<td>石家庄市裕华区行政审批局</td>
+					</tr>
+					<tr>
+						<th>发证机关所在地</th>
+						<td>河北</td>
+					</tr>
+					<tr>
+						<th>从业种类</th>
+						<td>作业人员</td>
+					</tr>
+					<tr>
+						<th>取证方式</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>考核单位</th>
+						<td>河北省特种设备监督检验研究院</td>
+					</tr>
+					<tr>
+						<th>考核日期</th>
+						<td id="v_khDate">--</td>
+					</tr>
+					<tr>
+						<th>持证项目</th>
+						<td>移动式压力容器充装</td>
+					</tr>
+					<tr>
+						<th>批准日期</th>
+						<td>2024-06-20</td>
+					</tr>
+					<tr>
+						<th>批准单位</th>
+						<td>石家庄市裕华区行政审批局</td>
+					</tr>
+					<tr>
+						<th>有效日期</th>
+						<td>2024年06月至2028年05月</td>
+					</tr>
+					<tr>
+						<th>备注</th>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
 
-    const query = new URLSearchParams(window.location.search);
-    const hasParams = query.get("name") || query.get("phone");
+	<script>
+		const BASE_URL = `https://qr.zqtime.fun/`;
 
-    if (hasParams) {
-      document.getElementById("card").style.display = "block";
-      fillInfoFromParams();
-    } else {
-      document.getElementById("generator").style.display = "block";
-    }
+		// 初始化页面显示
+		const query = new URLSearchParams(window.location.search);
+		const hasParams = query.get("name") || query.get("idNumber");
 
-    function fillInfoFromParams() {
-      const get = key => decodeURIComponent(query.get(key) || "--");
-      const setHTML = (id, val) => document.getElementById(id).innerHTML = val;
-      const setText = (id, val) => document.getElementById(id).innerText = val;
+		if (hasParams) {
+			document.getElementById("cardTable").style.display = "block";
+			fillInfoFromParams();
+		} else {
+			document.getElementById("generator").style.display = "block";
+		}
 
-      setText("v_name", get("name"));
-      setText("v_email", get("email"));
-      setText("v_phone", get("phone"));
-      setText("v_wechat", get("wechat"));
-      setText("v_stack", get("stack"));
+		// 从URL参数填充信息
+		function fillInfoFromParams() {
+			const get = key => decodeURIComponent(query.get(key) || "--");
+			const setText = (id, val) => {
+				const element = document.getElementById(id);
+				if (element) element.textContent = val;
+			};
 
-      const github = get("github");
-      if (github.startsWith("http")) {
-        setHTML("v_github", `<a href="${github}" target="_blank">${github}</a>`);
-      } else {
-        setText("v_github", github);
-      }
-    }
+			setText("v_name", get("name"));
+			setText("v_idNumber", get("idNumber"));
+			setText("v_khDate", get("khDate"));
+		}
 
-    function generateQRCode() {
-      const getVal = id => encodeURIComponent(document.getElementById(id).value.trim());
-      const name = getVal("name");
-      const email = getVal("email");
-      const phone = getVal("phone");
+		// 生成二维码
+		function generateQRCode() {
+			const getVal = id => {
+				const element = document.getElementById(id);
+				return element ? encodeURIComponent(element.value.trim()) : "";
+			};
 
-      if (!name || !phone) {
-        alert("请填写姓名和电话");
-        return;
-      }
+			const name = getVal("name");
+			const idNumber = getVal("idNumber");
+			const khDate = getVal("khDate");
 
-      const fullUrl = `${BASE_URL}?name=${name}&email=${email}&phone=${phone}`;
-      document.getElementById("qrcode").innerHTML = "";
+			if (!name || !idNumber) {
+				alert("请填写姓名和身份证号");
+				return;
+			}
 
-      const qr = new QRCode(document.getElementById("qrcode"), {
-        text: fullUrl,
-        width: 220,
-        height: 220
-      });
+			const fullUrl = `${BASE_URL}?name=${name}&idNumber=${idNumber}${khDate ? `&khDate=${khDate}` : ''}`;
+			const qrcodeElement = document.getElementById("qrcode");
+			qrcodeElement.innerHTML = "";
 
-      setTimeout(() => {
-        const img = document.querySelector("#qrcode img") || document.querySelector("#qrcode canvas");
-        if (img?.src) {
-          document.getElementById("download-link").href = img.src;
-          document.getElementById("download-link").style.display = "block";
-        } else if (img?.toDataURL) {
-          document.getElementById("download-link").href = img.toDataURL("image/png");
-          document.getElementById("download-link").style.display = "block";
-        }
-      }, 300);
-    }
-  </script>
+			new QRCode(qrcodeElement, {
+				text: fullUrl,
+				width: 200,
+				height: 200,
+				colorDark: "#000",
+				colorLight: "#ffffff",
+				correctLevel: QRCode.CorrectLevel.H
+			});
+
+			// 设置下载链接
+			setTimeout(() => {
+				const img = qrcodeElement.querySelector("img") || qrcodeElement.querySelector("canvas");
+				if (img) {
+					const downloadLink = document.getElementById("download-link");
+					if (img.src) {
+						downloadLink.href = img.src;
+					} else if (img.toDataURL) {
+						downloadLink.href = img.toDataURL("image/png");
+					}
+					downloadLink.style.display = "block";
+				}
+			}, 300);
+		}
+	</script>
 </body>
+
 </html>
