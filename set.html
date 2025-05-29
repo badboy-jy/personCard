@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>修改缓存</title>
+  <style>
+    body { text-align: center; margin-top: 100px; font-family: sans-serif; }
+    .tip { margin-top: 20px; font-size: 16px; color: #444; }
+  </style>
+</head>
+<body>
+  <h1>TapMe 点击次数修改器</h1>
+  <button onclick="set()">设置 clicksLeft = 8</button>
+  <div class="tip" id="status">等待操作中...</div>
+
+  <script>
+    function set() {
+      try {
+        let gameState = JSON.parse(localStorage.getItem('tapmeGameState') || '{}');
+        gameState.clicksLeft = 8;
+        localStorage.setItem('tapmeGameState', JSON.stringify(gameState));
+        document.getElementById('status').innerText = '✅ 成功设置为 8 次';
+      } catch (e) {
+        document.getElementById('status').innerText = '❌ 设置失败：' + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
